@@ -1,7 +1,9 @@
-package fr.aylan.testtemp
+package fr.aylan.provider
 
 import android.app.SearchManager
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
@@ -11,14 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 
 
-class OtherActivity : AppCompatActivity() {
+class Main : AppCompatActivity() {
 
     var recycleView: RecyclerView? = null
-    var myDataset = emptyArray<FAQQuestion>()
+    var questions = emptyArray<FAQQuestion>()
 
-    var viewAdapter: VoyantsAdapter? = null
+    var viewAdapter: FAQAdapter? = null
     var viewManager: LinearLayoutManager? = null
     var searchView: SearchView? = null
+
+    private val URL = "content://fr.aylan.provider.FAQQuestion/questions"
+    private val Questions = Uri.parse(URL)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +31,15 @@ class OtherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_other)
         recycleView = findViewById<RecyclerView>(R.id.lv2)
         searchView = findViewById<SearchView>(R.id.searchView)
-        myDataset = Gson().fromJson(
+        questions = Gson().fromJson(
             _faq,
             Array<FAQQuestion>::class.java
         )
 
+        addQuestions()
+
         viewManager = LinearLayoutManager(applicationContext)
-        viewAdapter = VoyantsAdapter(myDataset, applicationContext)
+        viewAdapter = FAQAdapter(questions, applicationContext)
 
 
         recycleView?.apply {
@@ -48,7 +55,7 @@ class OtherActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isBlank()) {
-                    viewAdapter = VoyantsAdapter(myDataset, applicationContext)
+                    viewAdapter = FAQAdapter(questions, applicationContext)
 
                     recycleView?.apply {
                         setHasFixedSize(true)
@@ -57,8 +64,8 @@ class OtherActivity : AppCompatActivity() {
                     }
                     return true
                 } else {
-                    var items = myDataset.getFiltered(query = newText)
-                    viewAdapter = VoyantsAdapter(items, applicationContext)
+                    var items = questions.getFiltered(query = newText)
+                    viewAdapter = FAQAdapter(items, applicationContext)
 
                     recycleView?.apply {
                         setHasFixedSize(true)
@@ -72,6 +79,15 @@ class OtherActivity : AppCompatActivity() {
         })
 
 
+    }
+
+    fun addQuestions() {
+        val values = ContentValues()
+        for (i in questions.indices) {
+            values.put("question", questions[i].question)
+            values.put("answer", questions[i].answer)
+            contentResolver.insert(Questions, values)
+        }
     }
 
 
@@ -88,7 +104,7 @@ class OtherActivity : AppCompatActivity() {
 
                 override fun onQueryTextChange(newText: String): Boolean {
                     if (newText.isBlank()) {
-                        viewAdapter = VoyantsAdapter(myDataset, applicationContext)
+                        viewAdapter = FAQAdapter(questions, applicationContext)
 
                         recycleView?.apply {
                             setHasFixedSize(true)
@@ -97,8 +113,8 @@ class OtherActivity : AppCompatActivity() {
                         }
                         return true
                     } else {
-                        var items = myDataset.getFiltered(query = newText)
-                        viewAdapter = VoyantsAdapter(items, applicationContext)
+                        var items = questions.getFiltered(query = newText)
+                        viewAdapter = FAQAdapter(items, applicationContext)
 
                         recycleView?.apply {
                             setHasFixedSize(true)

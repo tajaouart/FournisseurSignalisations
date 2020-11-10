@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
 
 
-    <style name="Theme.TestTemp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Provider" parent="Theme.MaterialComponents.DayNight.NoActionBar">
     </style>
 
 

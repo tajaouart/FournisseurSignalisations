@@ -1,4 +1,4 @@
-package fr.aylan.testtemp
+package fr.aylan.provider
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package fr.aylan.testtemp
+package fr.aylan.provider
 
 
 class FAQQuestion {

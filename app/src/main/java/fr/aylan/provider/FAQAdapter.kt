@@ -1,4 +1,4 @@
-package fr.aylan.testtemp
+package fr.aylan.provider
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 
-class VoyantsAdapter(private val myDataset: Array<FAQQuestion>, private val context: Context) :
-    RecyclerView.Adapter<VoyantsAdapter.MyViewHolder>() {
+class FAQAdapter(private val myDataset: Array<FAQQuestion>, private val context: Context) :
+    RecyclerView.Adapter<FAQAdapter.MyViewHolder>() {
 
     class MyViewHolder(textView: View) : RecyclerView.ViewHolder(textView)
 
